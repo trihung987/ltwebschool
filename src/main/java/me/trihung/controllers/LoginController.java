@@ -36,7 +36,7 @@ public class LoginController extends HttpServlet {
 		if (username.isEmpty() || password.isEmpty()) {
 			errorMsg = "Tài khoản hoặc mật khẩu không được trống";
 			req.setAttribute("error", errorMsg);
-			req.getRequestDispatcher("/login.jsp").forward(req, resp);
+			req.getRequestDispatcher("login.jsp").forward(req, resp);
 			return;
 		}
 
@@ -51,7 +51,8 @@ public class LoginController extends HttpServlet {
 				saveRemeber(resp, username, user.getFullname());
 			}
 			System.out.println("User "+username+" login to web");
-			resp.sendRedirect(req.getContextPath() + "/waiting");
+			req.setAttribute("name", user.getFullname());
+			req.getRequestDispatcher("main.jsp").forward(req, resp);
 		} else {
 			System.out.println("login fail");
 			errorMsg = "Tài khoản hoặc mật khẩu không đúng";
@@ -75,8 +76,8 @@ public class LoginController extends HttpServlet {
 			for (Cookie cookie : cookies) {
 				if (cookie.getName().equals("username")) {
 					session = req.getSession(true);
-					session.setAttribute("username", cookie.getValue());
 					resp.sendRedirect(req.getContextPath() + "/waiting");
+//					req.getRequestDispatcher("main.jsp").forward(req, resp);
 					return;
 				}
 			}

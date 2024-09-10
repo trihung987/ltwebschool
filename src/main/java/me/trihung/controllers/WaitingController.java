@@ -33,27 +33,17 @@ public class WaitingController extends HttpServlet {
 			for (Cookie cookie : cookies) {
 				session = req.getSession(true);
 				session.setAttribute(cookie.getName(), cookie.getValue());
+				ok = true;
 			}
 			
 		}
 		if (!ok) {
+			// go back home page
 			goHomePage(req, resp);
 			return;
 		}
-			
-		PrintWriter out = resp.getWriter();
-		// HTML page
-		out.println("<!DOCTYPE html>");
-		out.println("<html>");
-		out.println("<head>");
-		out.println("<title>Hello World </title>");
-		out.println("</head>");
-		out.println("<body>");
-		out.println("<h1>Xin chào "+ session.getAttribute("username") +"</h1>");
-		out.println("</body>");
-		out.println("</html>");
-		
-		// go back home page
+		req.setAttribute("name", session.getAttribute("username"));
+		req.getRequestDispatcher("main.jsp").forward(req, resp);
 		
 	}
 

@@ -5,15 +5,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+<%@
+include file ="/WEB-INF/css/stylehome.css"%>
+</style>
 </head>
 <body>
-	<br />
-	<h2>
-		<a href="login">Dang nhap</a>
-	</h2>
-	<br />
-	<h2>
-		<a href="register">Dang ki</a>
-	</h2>
+	<div class = "div-btn">
+		<button class = "btn-login"><a href="login">Login</a></button>	
+	
+		<button class = "btn-register"><a href="register">Register</a></button>
+	</div>
+	
 </body>
 </html>
