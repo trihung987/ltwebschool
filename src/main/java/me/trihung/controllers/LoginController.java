@@ -46,8 +46,9 @@ public class LoginController extends HttpServlet {
 		if (user != null) {
 			HttpSession session = req.getSession(true);
 			session.setAttribute("account", user);
+			System.out.println(user.getFullname());
 			if (isRememberMe) {
-				saveRemeber(resp, username);
+				saveRemeber(resp, username, user.getFullname());
 			}
 			System.out.println("User "+username+" login to web");
 			resp.sendRedirect(req.getContextPath() + "/waiting");
@@ -83,7 +84,7 @@ public class LoginController extends HttpServlet {
 		req.getRequestDispatcher("login.jsp").forward(req, resp);
 	}
 
-	private void saveRemeber(HttpServletResponse response, String username) {
+	private void saveRemeber(HttpServletResponse response, String username, String fullname) {
 		Cookie cookie = new Cookie(COOKIE_REMEMBER, username);
 		cookie.setMaxAge(30 * 60);
 		response.addCookie(cookie);
