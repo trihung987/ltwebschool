@@ -18,4 +18,11 @@ public interface IUserDAO {
 	boolean checkExistEmail(String email);
 	
 	boolean checkExistUsername(String username);
+	
+	String findRoleByID(int id);
+	
+	void insert(UserModel user, String role);
+	
+	boolean changePasswordByMail(String mail, String password);
+	
 }

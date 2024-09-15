@@ -1,10 +1,11 @@
 package me.trihung.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +18,8 @@ import me.trihung.services.IUserService;
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
 	public static final String SESSION_USERNAME = "username";
-	public static final String COOKIE_REMEMBER = "username";
-
+	
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/html");
@@ -28,66 +29,75 @@ public class LoginController extends HttpServlet {
 		String password = req.getParameter("password");
 		boolean isRememberMe = false;
 		String remember = req.getParameter("remember");
-
 		if ("on".equals(remember)) {
 			isRememberMe = true;
 		}
 		String errorMsg = "";
-		if (username.isEmpty() || password.isEmpty()) {
+		if (username == null || password == null) {
 			errorMsg = "Tài khoản hoặc mật khẩu không được trống";
+			req.setAttribute("color", "red");
 			req.setAttribute("error", errorMsg);
-			req.getRequestDispatcher("login.jsp").forward(req, resp);
+			req.setAttribute("type", "Login"); 
+			req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
 			return;
 		}
-
 		IUserService service = new UserServiceImpl();
 
 		UserModel user = service.login(username, password);
 		if (user != null) {
-			HttpSession session = req.getSession(true);
-			session.setAttribute("account", user);
-			System.out.println(user.getFullname());
-			if (isRememberMe) {
-				saveRemeber(resp, username, user.getFullname());
-			}
-			System.out.println("User "+username+" login to web");
-			req.setAttribute("name", user.getFullname());
-			req.getRequestDispatcher("main.jsp").forward(req, resp);
+			
+			saveRemeber(req, user);
+			
+			System.out.println("User "+username+" login to web, role: "+user.getRole());
+			if (user.getRole().equals("MEMBER"))
+				resp.sendRedirect(req.getContextPath() + "/waiting");
+			else if (user.getRole().equals("MANAGER"))
+				resp.sendRedirect(req.getContextPath() + "/manager");
+//			req.getRequestDispatcher("main.jsp").forward(req, resp);
 		} else {
-			System.out.println("login fail");
+			System.out.println("login fail for user: "+username);
 			errorMsg = "Tài khoản hoặc mật khẩu không đúng";
+			req.setAttribute("color", "red");
 			req.setAttribute("error", errorMsg); 
-			req.getRequestDispatcher("login.jsp").forward(req, resp);
+			req.setAttribute("type", "Login"); 
+			req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
 			
 		}
 
 	}
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession(false);
-		if (session != null && session.getAttribute("account") != null) {
-			resp.sendRedirect(req.getContextPath() + "/waiting");
+		if (session != null && session.getAttribute("usermodel") != null) {
+			UserModel user = (UserModel) session.getAttribute("usermodel");
+			if (user.getRole().equals("MEMBER"))
+				resp.sendRedirect(req.getContextPath() + "/waiting");
+			else if (user.getRole().equals("MANAGER"))
+				resp.sendRedirect(req.getContextPath() + "/manager");
 			return;
 		}
-		// Check cookie
-		Cookie[] cookies = req.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("username")) {
-					session = req.getSession(true);
-					resp.sendRedirect(req.getContextPath() + "/waiting");
-//					req.getRequestDispatcher("main.jsp").forward(req, resp);
-					return;
-				}
-			}
-		}
-		req.getRequestDispatcher("login.jsp").forward(req, resp);
+//		// Check cookie
+//		Cookie[] cookies = req.getCookies();
+//		if (cookies != null) {
+//			for (Cookie cookie : cookies) {
+//				if (cookie.getName().equals("username")) {
+//					session = req.getSession(true);
+//					resp.sendRedirect(req.getContextPath() + "/waiting");
+////					req.getRequestDispatcher("main.jsp").forward(req, resp);
+//					return;
+//				}
+//			}
+//		}
+		
+		req.removeAttribute("error");
+		req.setAttribute("type", "Login"); 
+		req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
 	}
 
-	private void saveRemeber(HttpServletResponse response, String username, String fullname) {
-		Cookie cookie = new Cookie(COOKIE_REMEMBER, username);
-		cookie.setMaxAge(30 * 60);
-		response.addCookie(cookie);
+	private void saveRemeber(HttpServletRequest req, UserModel usermodel) {
+		HttpSession session = req.getSession();
+		session.setAttribute("usermodel", usermodel);
 	}
 }

@@ -5,10 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
-<%@
-include file ="/WEB-INF/css/stylehome.css"%>
-</style>
+
 </head>
 <body>
 	<div class = "div-btn">

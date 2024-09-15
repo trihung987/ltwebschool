@@ -23,6 +23,8 @@ public class UserServiceImpl implements IUserService {
 
 //		long millis = System.currentTimeMillis();
 //		Date date = new Date(millis);
+		if (checkExistEmail(email) || checkExistUsername(username))
+			return false;
 		userDao.insert(new UserModel(username, email, password, fullname));
 		return true;
 	}

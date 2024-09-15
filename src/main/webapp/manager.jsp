@@ -4,17 +4,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Main</title>
+<title>Insert title here</title>
 <style>
 <%@
-include file ="/WEB-INF/css/stylemain.css"%>
+include file ="WEB-INF/css/stylemain.css"%>
 </style>
 </head>
 <body>
-
-	<div class="content">
-		<p class="contenth1" style="color: orange">Hello world ${name}</p>
-
+	<div class = "content">
+		<p class="contenth1" style="color: green">Hello manager: ${name}</p>
+		<button class = "btn"><a href="logout">Logout</a></button>
 		<div class="loader">
 			<div class="truckWrapper">
 				<div class="truckBody">
@@ -69,7 +68,8 @@ h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"></path>
     </svg>
 			</div>
 		</div>
-
 	</div>
+	
+	 
 </body>
 </html>

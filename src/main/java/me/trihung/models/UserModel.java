@@ -10,25 +10,36 @@ public class UserModel implements Serializable {
 	private String password;
 	private String fullname;
 	private String images;
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	private String role;
 
 	public UserModel() {
 	}
 
-	public UserModel(int id, String username, String email, String password, String fullname, String images) {
+	public UserModel(int id, String username, String email, String password, String fullname, String images, String role) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.fullname = fullname;
 		this.images = images;
+		this.role = role;
 	}
 
-	public UserModel(String username, String email, String password, String fullname, String images) {
+	public UserModel(String username, String email, String password, String fullname, String images, String role) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.fullname = fullname;
 		this.images = images;
+		this.role = role;
 	}
 
 	public UserModel(String username, String email, String password, String fullname) {
@@ -36,6 +47,7 @@ public class UserModel implements Serializable {
 		this.email = email;
 		this.password = password;
 		this.fullname = fullname;
+		this.role = "MEMBER";
 	}
 
 	public int getId() {

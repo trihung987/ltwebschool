@@ -17,7 +17,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 
 	@Override
 	public List<UserModel> findAll() {
-		String sql = "select * tableUser";
+		String sql = "select * FROM tableUser";
 		List<UserModel> list = new ArrayList<>();
 		try {
 			conn = super.getConnection();
@@ -25,18 +25,20 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				list.add(new UserModel(rs.getInt("id"), rs.getString("username"), rs.getString("email"),
-						rs.getString("password"), rs.getString("image"), rs.getString("fullname")));
+						rs.getString("password"), rs.getString("image"), rs.getString("fullname"),
+						findRoleByID(rs.getInt("id"))));
 			}
-			return list;
+			if (list.size()!=0)
+				return list;
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 		return null;
 	}
 
 	@Override
 	public UserModel findByEmail(String email) {
-		String sql = "SELECT * tableUser WHERE email = ?";
+		String sql = "SELECT * FROM tableUser WHERE email = ?";
 		UserModel oneUser = new UserModel();
 
 		try {
@@ -44,6 +46,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, email);
 			rs = ps.executeQuery();
+		
 			while (rs.next()) {
 				oneUser.setId(rs.getInt("id"));
 				oneUser.setUsername(rs.getString("username"));
@@ -51,8 +54,10 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 				oneUser.setEmail(rs.getString("email"));
 				oneUser.setPassword(rs.getString("password"));
 				oneUser.setImages(rs.getString("image"));
+				oneUser.setRole(findRoleByID(rs.getInt("id")));
+				return oneUser;
 			}
-			return oneUser;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -78,10 +83,12 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 				oneUser.setEmail(rs.getString("email"));
 				oneUser.setPassword(rs.getString("password"));
 				oneUser.setImages(rs.getString("image"));
+				oneUser.setRole(findRoleByID(rs.getInt("id")));
+				return oneUser;
 			}
-			return oneUser;
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		} finally {
 
 		}
@@ -98,6 +105,22 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 			ps.setString(2, user.getEmail());
 			ps.setString(3, user.getPassword());
 			ps.setString(4, user.getFullname());
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		UserModel um = findByUserName(user.getUsername());
+		insert(um, user.getRole());
+	}
+
+	@Override
+	public void insert(UserModel user, String role) {
+		String sql = "INSERT INTO tableRole (id, role) VALUES (?, ?)";
+		try {
+			conn = super.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, user.getId());
+			ps.setString(2, role);
 			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,7 +146,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 	}
 
 	public static void main(String[] arg) {
-		UserDAOImpl userDAO = new UserDAOImpl();
+		IUserDAO userDAO = new UserDAOImpl();
 		UserModel user = userDAO.findByEmail("trihung@gmail.com");
 		System.out.println(user.getId());
 		System.out.println(user.getUsername());
@@ -131,6 +154,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 		System.out.println(user.getPassword());
 		System.out.println(user.getImages());
 		System.out.println(user.getFullname());
+		System.out.println(user.getRole());
 
 	}
 
@@ -151,14 +175,55 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 				oneUser.setEmail(rs.getString("email").strip());
 				oneUser.setPassword(rs.getString("password").strip());
 				oneUser.setImages(rs.getString("image"));
+				oneUser.setRole(findRoleByID(oneUser.getId()));
+				return oneUser;
 			}
-			return oneUser;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+
+		return null;
+	}
+
+	@Override
+	public String findRoleByID(int id) {
+		String sql = "SELECT * FROM tableRole WHERE id = ?";
+		try {
+			conn = super.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getString("role");
+			}
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 
 		}
 		return null;
+	}
+
+	@Override
+	public boolean changePasswordByMail(String mail, String password) {
+		String sql = "UPDATE tableUser SET password=? WHERE email = ?";
+		try {
+			conn = super.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, password);
+			ps.setString(2, mail);
+			ps.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return false;
 	}
 
 }
