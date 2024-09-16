@@ -1,17 +1,11 @@
 package me.trihung.controllers;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
@@ -33,8 +27,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import me.trihung.dao.UserServiceImpl;
 import me.trihung.dao.impl.UserDAOImpl;
 import me.trihung.services.IUserService;
-import me.trihung.timer.OTPTimer;
-import me.trihung.timer.ServerUpdate;
 
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/forget")
@@ -42,12 +34,13 @@ public class ForgetController extends HttpServlet {
 	public static final String SESSION_USERNAME = "username";
 	public HashMap<String, Long> mailTime = new HashMap<>();
 	public HashMap<String, String> mailOTP = new HashMap<>();
-
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/html");
 		resp.setCharacterEncoding("UTF-8");
 		req.setCharacterEncoding("UTF-8");
+
 		String button = req.getParameter("button");
 		String mail = req.getParameter("email");
 		String newpass = req.getParameter("password");
@@ -64,6 +57,7 @@ public class ForgetController extends HttpServlet {
 				req.setAttribute("color", "red");
 				req.setAttribute("msg", "Vui lòng chờ "+(60-secondDiff(mail))+"s nữa trước khi lấy OTP mới!");
 			}else {
+				req.setAttribute("status", "block");
 				req.setAttribute("color", "green");
 				req.setAttribute("msg", "Vui lòng kiểm tra mail để lấy mã OTP");
 				mailTime.remove(mail);
@@ -75,13 +69,19 @@ public class ForgetController extends HttpServlet {
 			if (otp!=null && otp.strip().length()==6) {
 				if (isOTPAndInTime(mail, otp)) {
 					//change pass
-					if (changePassword(mail, newpass)) {
-						req.setAttribute("color", "green");
-						req.setAttribute("msg", "Đổi mật khẩu thành công!");
+					if (isValidPassword(newpass)) {
+						if (changePassword(mail, newpass)) {
+							req.setAttribute("color", "green");
+							req.setAttribute("msg", "Đổi mật khẩu thành công!");
+						}else {
+							req.setAttribute("color", "red");
+							req.setAttribute("msg", "Đã xảy ra lỗi!");
+						}
 					}else {
 						req.setAttribute("color", "red");
-						req.setAttribute("msg", "Đã xảy ra lỗi!");
+						req.setAttribute("msg", "Mật khẩu phải từ 8-20 kí tự (chữ cái, số, kí tự đặc biệt)!");
 					}
+					
 				}else {
 					req.setAttribute("color", "red");
 					req.setAttribute("msg", "OTP sai hoặc đã quá hạn 60s! Vui lòng lấy mã OTP mới");
@@ -93,7 +93,11 @@ public class ForgetController extends HttpServlet {
 			}
 		}
 		reloadPage(mail, newpass, req, resp);
-		
+	}
+	
+	public Boolean isValidPassword(String password) {
+		UserServiceImpl usi = new UserServiceImpl();
+		return usi.isValidPassword(password);
 	}
 	
 	public Boolean changePassword(String mail, String password) {
@@ -106,6 +110,7 @@ public class ForgetController extends HttpServlet {
 			req.setAttribute("oldmail", mail);
 		if (newpass!=null)
 			req.setAttribute("oldpass", newpass);
+		req.setAttribute("status", "none");
 		req.getRequestDispatcher("forgetpass.jsp").forward(req, resp);
 	}
 
@@ -115,6 +120,7 @@ public class ForgetController extends HttpServlet {
 		req.removeAttribute("msg");
 		req.removeAttribute("oldmail");
 		req.removeAttribute("oldpass");
+		req.setAttribute("status", "none");
 		req.getRequestDispatcher("forgetpass.jsp").forward(req, resp);
 	}
 	

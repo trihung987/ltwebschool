@@ -44,4 +44,10 @@ public class UserServiceImpl implements IUserService {
 		return userDao.findByUserName(username);
 	}
 
+	@Override
+	public boolean isValidPassword(String password) {
+		password = password.strip();
+		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+	}
+
 }

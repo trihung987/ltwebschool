@@ -27,8 +27,8 @@ public class ServerUpdate implements ServletContextListener{
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		// TODO Auto-generated method stub
-		scheduler.shutdown();
+//		// TODO Auto-generated method stub
+//		scheduler.shutdown();
 	}
 
 }

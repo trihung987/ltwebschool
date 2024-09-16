@@ -74,13 +74,13 @@
 	<div class="overlay-container">
 		<div class="overlay">
 			<div class="overlay-panel overlay-left">
-				<h1>Welcome Back!</h1>
-				<p>To keep connected with us please login with your personal info</p>
+				<h1>Đã có tài khoản?</h1>
+				<p>Hãy đăng nhập vào tài khoản của bạn!</p>
 				<button class="ghost" id="signIn">Sign In</button>
 			</div>
 			<div class="overlay-panel overlay-right">
-				<h1>Hello, Friend!</h1>
-				<p>Enter your personal details and start journey with us</p>
+				<h1>Thành viên mới?</h1>
+				<p>Bạn có thể đăng ký tài khoản ở đây!</p>
 				<button class="ghost" id="signUp">Sign Up</button>
 			</div>
 		</div>
@@ -95,17 +95,21 @@
 		<a target="_blank" href="https://github.com/trihung987/ltwebschool">here</a>.
 	</p>
 </footer>
-<script src="js/function.js"> </script>
-<script src="js/password2.js"> </script>
-	<script> 
+<script> 
 		let test = "${type}";
-		
-		if (test.length>5){
-			document.getElementById('container').classList.add('right-panel-active');
-			console.log("${type}");
-		}
+		 if (test.length>5){
+			 var delayInMilliseconds = 100; //delay 0.1 second for loading web
+			 setTimeout(function() {
+				document.getElementById('container').classList.add('right-panel-active');
+				console.log("${type}");
+			 }, delayInMilliseconds);
+			
+		} 
 		
 	</script>
+<script src="js/function.js"> </script>
+<script src="js/password2.js"> </script>
+	
 </body>
 </html>
 

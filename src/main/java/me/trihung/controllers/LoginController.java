@@ -1,9 +1,6 @@
 package me.trihung.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,11 +24,11 @@ public class LoginController extends HttpServlet {
 		req.setCharacterEncoding("UTF-8");
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		boolean isRememberMe = false;
-		String remember = req.getParameter("remember");
-		if ("on".equals(remember)) {
-			isRememberMe = true;
-		}
+//		boolean isRememberMe = false;
+//		String remember = req.getParameter("remember");
+//		if ("on".equals(remember)) {
+//			isRememberMe = true;
+//		}
 		String errorMsg = "";
 		if (username == null || password == null) {
 			errorMsg = "Tài khoản hoặc mật khẩu không được trống";

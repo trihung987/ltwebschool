@@ -1,24 +1,6 @@
 package me.trihung.controllers;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -58,23 +40,30 @@ public class RegisterController extends HttpServlet {
 		String email = req.getParameter("email");
 		String fullname = req.getParameter("fullname");
 		IUserService service = new UserServiceImpl();
+		if (!service.isValidPassword(password)) {
+			req.setAttribute("color", "red");
+			req.setAttribute("error2", "Mật khẩu phải từ 8-20 kí tự (chữ cái, số, kí tự đặc biệt)!");
+			req.setAttribute("type", "Register");
+			req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
+			return;
+		}
+
 		boolean isSuccess = service.register(username, email, password, fullname);
 		if (isSuccess) {
-			System.out.print("Thanh cong dang ky cho user: "+username);
+			System.out.print("Thanh cong dang ky cho user: " + username);
 			req.setAttribute("color", "green");
 			req.setAttribute("error", "Đăng ký thành công, bạn vui lòng đăng nhập lại!");
 			req.setAttribute("type", "Login");
-			req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
-			
+
 		} else {
-			System.out.println("Dang ky that bai cho user: "+username);
+			System.out.println("Dang ky that bai cho user: " + username);
 			req.setAttribute("color", "red");
 			req.setAttribute("error2", "Đăng ký thất bại do email hoặc username đã tồn tại");
 			req.setAttribute("type", "Register");
-			req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
 		}
+		req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
+
 
 	}
-	
 
 }

@@ -23,11 +23,17 @@ public class DBConnectSQLServer {
 		}
 	}
 	
+	public static boolean isValidPassword(String password) {
+		password = password.strip();
+		return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+	}
+	
 	public static void main(String[] arg) {
 		Connection con = getConnection();
 		try {
 			if (con!=null)
 				System.out.println("connect"+con.getCatalog());
+		System.out.println(isValidPassword("121212Hung@"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

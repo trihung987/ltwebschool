@@ -13,5 +13,7 @@ public interface IUserService {
 	boolean checkExistEmail(String email);
 
 	boolean checkExistUsername(String username);
+	
+	boolean isValidPassword(String password);
 
 }
