@@ -79,7 +79,7 @@ public class ForgetController extends HttpServlet {
 						}
 					}else {
 						req.setAttribute("color", "red");
-						req.setAttribute("msg", "Mật khẩu phải từ 8-20 kí tự (chữ cái, số, kí tự đặc biệt)!");
+						req.setAttribute("msg", "Mật khẩu phải từ 8-20 kí tự (chữ cái thường, hoa, số, kí tự đặc biệt)!");
 					}
 					
 				}else {

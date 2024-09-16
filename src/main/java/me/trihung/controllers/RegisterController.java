@@ -42,7 +42,7 @@ public class RegisterController extends HttpServlet {
 		IUserService service = new UserServiceImpl();
 		if (!service.isValidPassword(password)) {
 			req.setAttribute("color", "red");
-			req.setAttribute("error2", "Mật khẩu phải từ 8-20 kí tự (chữ cái, số, kí tự đặc biệt)!");
+			req.setAttribute("error2", "Mật khẩu phải từ 8-20 kí tự (chữ cái thường, hoa, số, kí tự đặc biệt)!");
 			req.setAttribute("type", "Register");
 			req.getRequestDispatcher("mainhome.jsp").forward(req, resp);
 			return;
