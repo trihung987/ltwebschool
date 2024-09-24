@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" version="6.0">
- 
- <display-name>Web login</display-name>
- <welcome-file-list>
- <welcome-file>mainhome.jsp</welcome-file>
- </welcome-file-list>
- 
- <servlet>
-    <servlet-name>jsp</servlet-name>
-    <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="https://jakarta.ee/xml/ns/jakartaee"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+	version="6.0">
 
-    <init-param>
-        <param-name>mappedfile</param-name>
-        <param-value>false</param-value>
-    </init-param>
+	<display-name>Web login</display-name>
+	<welcome-file-list>
+		<welcome-file>mainhome.jsp</welcome-file>
+	</welcome-file-list> 
+  
+	<servlet>
+		<servlet-name>jsp</servlet-name>
+		<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
 
-</servlet>
- 
+		<init-param>
+			<param-name>mappedfile</param-name>
+			<param-value>false</param-value>
+		</init-param>
+
+	</servlet>
+	<filter>
+		<filter-name>sitemesh</filter-name>
+		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+		
+	</filter>
+
+	<filter-mapping>
+		<filter-name>sitemesh</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> 
 </web-app>

@@ -25,4 +25,8 @@ public interface IUserDAO {
 	
 	boolean changePasswordByMail(String mail, String password);
 	
+	public boolean changePasswordByOldPass(String username, String oldpassword, String newpassword);
+		
+	boolean updateInfo(UserModel user);
+	
 }

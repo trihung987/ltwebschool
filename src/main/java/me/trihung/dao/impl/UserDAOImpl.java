@@ -24,9 +24,10 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while (rs.next()) {
+				String phone = rs.getString("phonenumber");
 				list.add(new UserModel(rs.getInt("id"), rs.getString("username"), rs.getString("email"),
 						rs.getString("password"), rs.getString("image"), rs.getString("fullname"),
-						findRoleByID(rs.getInt("id"))));
+						findRoleByID(rs.getInt("id")), phone));
 			}
 			if (list.size()!=0)
 				return list;
@@ -54,6 +55,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 				oneUser.setEmail(rs.getString("email"));
 				oneUser.setPassword(rs.getString("password"));
 				oneUser.setImages(rs.getString("image"));
+				oneUser.setPhone(rs.getString("phonenumber"));
 				oneUser.setRole(findRoleByID(rs.getInt("id")));
 				return oneUser;
 			}
@@ -83,6 +85,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 				oneUser.setEmail(rs.getString("email"));
 				oneUser.setPassword(rs.getString("password"));
 				oneUser.setImages(rs.getString("image"));
+				oneUser.setPhone(rs.getString("phonenumber"));
 				oneUser.setRole(findRoleByID(rs.getInt("id")));
 				return oneUser;
 			}
@@ -97,7 +100,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 
 	@Override
 	public void insert(UserModel user) {
-		String sql = "INSERT INTO tableUser (username, email, password, fullname) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO tableUser (username, email, password, fullname, phonenumber) VALUES (?, ?, ?, ?, ?)";
 		try {
 			conn = super.getConnection();
 			ps = conn.prepareStatement(sql);
@@ -105,6 +108,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 			ps.setString(2, user.getEmail());
 			ps.setString(3, user.getPassword());
 			ps.setString(4, user.getFullname());
+			ps.setString(5, user.getPhone());
 			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,7 +144,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 	public boolean checkExistUsername(String username) {
 		UserModel user = null;
 		user = this.findByUserName(username);
-		if (user == null)
+		if (user == null) 
 			return false;
 		return true;
 	}
@@ -155,6 +159,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 		System.out.println(user.getImages());
 		System.out.println(user.getFullname());
 		System.out.println(user.getRole());
+		System.out.println(user.getPhone());
 
 	}
 
@@ -175,6 +180,7 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 				oneUser.setEmail(rs.getString("email").strip());
 				oneUser.setPassword(rs.getString("password").strip());
 				oneUser.setImages(rs.getString("image"));
+				oneUser.setPhone(rs.getString("phonenumber"));
 				oneUser.setRole(findRoleByID(oneUser.getId()));
 				return oneUser;
 			}
@@ -218,6 +224,50 @@ public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {
 			ps.setString(2, mail);
 			ps.executeUpdate();
 			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return false;
+	}
+
+	@Override
+	public boolean updateInfo(UserModel user) {
+		if (!checkExistUsername(user.getUsername()))
+			return false;
+		String sql = "UPDATE tableUser SET email=?, password=?, image=?, fullname=?, phonenumber=?  WHERE username = ?";
+		try {
+			conn = super.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, user.getEmail());
+			ps.setString(2, user.getPassword());
+			ps.setString(3, user.getImages());
+			ps.setString(4, user.getFullname());
+			ps.setString(5, user.getPhone());
+			ps.setString(6, user.getUsername());
+			ps.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		return false;
+	}
+
+	@Override
+	public boolean changePasswordByOldPass(String username, String oldpassword, String newpassword) {
+
+		String sql = "UPDATE tableUser SET password=? WHERE username=? AND password = ?";
+		try {
+			conn = super.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, newpassword);
+			ps.setString(2, username);
+			ps.setString(3, oldpassword);
+			int i = ps.executeUpdate();
+			return i>0?true:false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

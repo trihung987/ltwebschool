@@ -19,13 +19,13 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean register(String username, String email, String password, String fullname) {
+	public boolean register(String username, String email, String password, String fullname, String phone) {
 
 //		long millis = System.currentTimeMillis();
 //		Date date = new Date(millis);
 		if (checkExistEmail(email) || checkExistUsername(username))
 			return false;
-		userDao.insert(new UserModel(username, email, password, fullname));
+		userDao.insert(new UserModel(username, email, password, fullname, phone));
 		return true;
 	}
 

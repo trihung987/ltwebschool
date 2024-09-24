@@ -10,15 +10,8 @@ public class UserModel implements Serializable {
 	private String password;
 	private String fullname;
 	private String images;
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
 	private String role;
+	private String phone;
 
 	public UserModel() {
 	}
@@ -32,7 +25,18 @@ public class UserModel implements Serializable {
 		this.images = images;
 		this.role = role;
 	}
-
+	
+	public UserModel(int id, String username, String email, String password, String fullname, String images, String role, String phone) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.fullname = fullname;
+		this.images = images;
+		this.role = role;
+		this.phone = phone; 
+	}
+	
 	public UserModel(String username, String email, String password, String fullname, String images, String role) {
 		this.username = username;
 		this.email = email;
@@ -42,12 +46,21 @@ public class UserModel implements Serializable {
 		this.role = role;
 	}
 
-	public UserModel(String username, String email, String password, String fullname) {
+//	public UserModel(String username, String email, String password, String fullname) {
+//		this.username = username;
+//		this.email = email;
+//		this.password = password;
+//		this.fullname = fullname;
+//		this.role = "MEMBER";
+//	}
+	
+	public UserModel(String username, String email, String password, String fullname, String phone) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.fullname = fullname;
 		this.role = "MEMBER";
+		this.phone = phone;
 	}
 
 	public int getId() {
@@ -96,5 +109,21 @@ public class UserModel implements Serializable {
 
 	public void setImages(String images) {
 		this.images = images;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

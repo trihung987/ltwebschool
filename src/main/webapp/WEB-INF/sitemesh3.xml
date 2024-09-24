@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	<mapping path="/manager" decorator="manager/managerdeco.jsp" />
+	<mapping path="/waiting" decorator="member/waitingdeco.jsp" />
+ 	<mapping path="/profile_account" decorator="manager/profile_accountdeco.jsp" />
+ 	<!-- Exclude path from decoration. -->
+	<mapping path="/api*" exclude="true" /> 
+</sitemesh> 

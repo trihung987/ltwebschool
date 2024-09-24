@@ -8,7 +8,7 @@ public interface IUserService {
 
 	public UserModel get(String username);
 
-	boolean register(String username, String email, String password, String fullname);
+	boolean register(String username, String email, String password, String fullname, String phone);
 
 	boolean checkExistEmail(String email);
 

@@ -39,6 +39,7 @@ public class RegisterController extends HttpServlet {
 		String password = req.getParameter("password");
 		String email = req.getParameter("email");
 		String fullname = req.getParameter("fullname");
+		String phone = req.getParameter("phone");
 		IUserService service = new UserServiceImpl();
 		if (!service.isValidPassword(password)) {
 			req.setAttribute("color", "red");
@@ -48,7 +49,7 @@ public class RegisterController extends HttpServlet {
 			return;
 		}
 
-		boolean isSuccess = service.register(username, email, password, fullname);
+		boolean isSuccess = service.register(username, email, password, fullname, phone);
 		if (isSuccess) {
 			System.out.print("Thanh cong dang ky cho user: " + username);
 			req.setAttribute("color", "green");

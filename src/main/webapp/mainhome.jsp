@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri= "jakarta.tags.core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,8 +20,11 @@
  <link rel="stylesheet"  href="/css/bootstrap.min.css"/> -->
 <!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
  --> <style>
-<%@ include file ="/WEB-INF/css/style2.css"%>
+ <%@ include file ="/WEB-INF/css/style2.css"%>
+
 </style>   
+<link href="WEB-INF/css/style2.css" rel="stylesheet" type="text/css"/>
+
 <!-- <script>
 	if ("${type}".length==0){
 		$type = "Login";
@@ -47,6 +51,7 @@
 			<input type="text" name = "username" placeholder="Username" required/>
 			<input type="email" name = "email" placeholder="Email" required/>
 			<input type="text" name = "fullname" placeholder="Fullname" required/>
+			<input type="text" name = "phone" placeholder="Phone" required/>
 			<input type="password" id = "pass-input" name = "password" placeholder="Password" required/>
 			<span id="toggle-pass" class="fa-regular fa-eye toggle-password" ></span>
 			<p class="text-center" style="color: ${color}">${error2}</p>
@@ -85,7 +90,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>	
 
 <footer>
 	<p>
@@ -95,7 +100,9 @@
 		<a target="_blank" href="https://github.com/trihung987/ltwebschool">here</a>.
 	</p>
 </footer>
+
 <script> 
+		scroll(0, 15);
 		let test = "${type}";
 		 if (test.length>5){
 			 var delayInMilliseconds = 100; //delay 0.1 second for loading web
