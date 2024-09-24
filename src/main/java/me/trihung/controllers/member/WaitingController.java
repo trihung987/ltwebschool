@@ -45,6 +45,7 @@ public class WaitingController extends HttpServlet {
 			}
 			req.setAttribute("imgencode", imgenc);
 			req.setAttribute("username", user.getUsername());
+			req.setAttribute("fullname", user.getFullname());
 			ok = true;
 		}
 		if (!ok) {
