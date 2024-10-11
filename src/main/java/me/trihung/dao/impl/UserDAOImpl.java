@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.trihung.config.DBConnectSQLServer;
+import me.trihung.dao.IUserDAO;
 import me.trihung.models.UserModel;
 
 public class UserDAOImpl extends DBConnectSQLServer implements IUserDAO {

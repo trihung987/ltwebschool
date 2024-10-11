@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import me.trihung.dao.UserServiceImpl;
 import me.trihung.dao.impl.UserDAOImpl;
+import me.trihung.dao.impl.UserServiceImpl;
 import me.trihung.models.UserModel;
 
 @SuppressWarnings("serial")

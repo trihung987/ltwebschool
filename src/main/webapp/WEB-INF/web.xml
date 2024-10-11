@@ -6,7 +6,7 @@
 
 	<display-name>Web login</display-name>
 	<welcome-file-list>
-		<welcome-file>mainhome.jsp</welcome-file>
+		<welcome-file>view/manager/category-list.jsp</welcome-file>
 	</welcome-file-list> 
   
 	<servlet>

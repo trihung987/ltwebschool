@@ -1,7 +1,6 @@
-package me.trihung.dao;
+package me.trihung.dao.impl;
 
-import me.trihung.dao.impl.IUserDAO;
-import me.trihung.dao.impl.UserDAOImpl;
+import me.trihung.dao.IUserDAO;
 import me.trihung.models.UserModel;
 import me.trihung.services.IUserService;
 

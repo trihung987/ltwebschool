@@ -1,4 +1,4 @@
-package me.trihung.dao.impl;
+package me.trihung.dao;
 
 import java.util.List;
 
