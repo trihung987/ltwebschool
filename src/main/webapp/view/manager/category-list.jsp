@@ -1,6 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<html>
+<head>
+<style>
+body {
+  background-color: linen;
+}
+
+.search {
+	display: flex;
+	width: 120%;
+}
+
+.search-btn{
+	transform: translateX(13px)
+}
+</style>
+</head>
+<br>
+ <form action="<c:url value='/manager/category/search'></c:url>"
+		method="get" enctype="multipart/form-data">
+<div class="input-search">
+<input type="text"
+			id="search" name="search" placeholder="Tìm kiếm...">
+
+<input class="search-btn" type="submit" value="Search">
+			
+</div>
+</form> 
+<a href="<c:url value='/manager/category/insert'/>">Thêm category</a>
+<br>		
 <table border="1">
 	<tr>
 		<th>STT</th>
@@ -28,3 +58,4 @@
 		</tr>
 	</c:forEach>
 </table> 
+</html>>

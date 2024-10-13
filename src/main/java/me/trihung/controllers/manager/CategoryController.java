@@ -1,9 +1,7 @@
 package me.trihung.controllers.manager;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -20,7 +18,7 @@ import me.trihung.services.impl.CategoryServiceImpl;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet(urlPatterns = { "/manager/category", "/manager/category/edit", "/manager/category/update",
-		"/manager/category/insert", "/manager/category/delete" })
+		"/manager/category/insert", "/manager/category/delete" , "/manager/category/search"})
 public class CategoryController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -48,6 +46,18 @@ public class CategoryController extends HttpServlet {
 			categoryService.delete(category.getCategoryid());
 			System.out.println("delete category id: " + id);
 			loadCategories(req, resp);
+		} else if (url.contains("/manager/category/search")) {
+			String name = req.getParameter("search");
+			System.out.println("search by name: "+name);
+			if (name.strip().length()==0) {
+				List<CategoryModel> list = categoryService.findAll();
+				req.setAttribute("listcate", list);
+				req.getRequestDispatcher("/view/manager/category-list.jsp").forward(req, resp);
+				return;
+			}
+			List<CategoryModel> list = categoryService.findName(name);
+			req.setAttribute("listcate", list);
+			req.getRequestDispatcher("/view/manager/category-list.jsp").forward(req, resp);
 		} else {
 			List<CategoryModel> list = categoryService.findAll();
 			req.setAttribute("listcate", list);
@@ -63,9 +73,9 @@ public class CategoryController extends HttpServlet {
 	public String uploadFileImage(HttpServletRequest request) {
 		String uploadPath = getServletContext().getRealPath("") + Constant.UPLOAD_DIRECTORY;
 		File uploadDir = new File(uploadPath);
-
+		
 		if (!uploadDir.exists())
-			uploadDir.mkdir();
+			uploadDir.mkdirs();
 		try {
 			String fileName = "";
 			Part part = request.getPart("images");
@@ -76,7 +86,6 @@ public class CategoryController extends HttpServlet {
 			System.out.println(uploadPath);
 			part.write(uploadPath + fileName);
 			request.setAttribute("message", "File " + fileName + " has uploaded successfully!");
-
 			return fileName;
 
 		} catch (Exception e) {
@@ -103,7 +112,6 @@ public class CategoryController extends HttpServlet {
 			if (images!=null)
 				category.setImages(images);
 			category.setStatus(status);
-
 			categoryService.update(category);
 			loadCategories(req, resp);
 
